@@ -3,6 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Angle Selector</title>
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 400px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #007bff;
+            border-radius: 5px;
+        }
+        input[type="range"] {
+            width: 100%;
+            -webkit-appearance: none;
+            height: 10px;
+            border-radius: 5px;
+            background: #d3d3d3;
+            outline: none;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #007bff;
+            cursor: pointer;
+        }
+        .radio-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .radio-buttons label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+        input[type="radio"] {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const AnglePicker = () => {
+            const [angle, setAngle] = React.useState(0);
+
+            const changeAngle = (value) => {
+                const adjustedValue = ((value % 360) + 360) % 360;
+                setAngle(adjustedValue);
+            };
+
+            const handleTextChange = (e) => {
+                const value = parseFloat(e.target.value);
+                if (!isNaN(value)) {
+                    changeAngle(value);
+                }
+            };
+
+            const handleRangeChange = (e) => {
+                changeAngle(parseInt(e.target.value));
+            };
+
+            const handleRadioChange = (e) => {
+                changeAngle(parseInt(e.target.value));
+            };
+
+            const predefinedAngles = [0, 45, 60, 90, 180];
+
+            return (
+                <div className="container">
+                    <h1>Interactive Angle Selector</h1>
+                    <div className="wrapper">
+                        <input
+                            type="text"
+                            value={angle}
+                            onChange={handleTextChange}
+                            placeholder="Enter angle"
+                        />
+                        <input
+                            type="range"
+                            min="0"
+                            max="360"
+                            value={angle}
+                            onChange={handleRangeChange}
+                        />
+                        <div className="radio-buttons">
+                            {predefinedAngles.map((preset) => (
+                                <label key={preset}>
+                                    <input
+                                        type="radio"
+                                        name="anglePreset"
+                                        value={preset}
+                                        checked={angle === preset}
+                                        onChange={handleRadioChange}
+                                    />
+                                    {preset}°
+                                </label>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        ReactDOM.render(<AnglePicker />, document.getElementById('root'));
+    </script>
+</body>
+</html>
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Angle Picker - React</title>
     <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
@@ -90,3 +236,4 @@
     </script>
 </body>
 </html>
+ -->
